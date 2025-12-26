@@ -16,7 +16,7 @@ const Page = async ({ params }: NextPageProps) => {
     fetcher<OHLCData>(`/coins/${id}/ohlc`, {
       vs_currency: 'usd',
       days: 1,
-      interval: 'hourly',
+      // interval: 'hourly',
       precision: 'full',
     }),
   ]);
