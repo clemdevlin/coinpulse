@@ -9,17 +9,19 @@ import Converter from '@/components/Converter';
 const Page = async ({ params }: NextPageProps) => {
   const { id } = await params;
 
-  const [coinData, coinOHLCData] = await Promise.all([
+  const [coinData, coinOHLCDataRaw] = await Promise.all([
     fetcher<CoinDetailsData>(`/coins/${id}`, {
       dex_pair_format: 'contract_address',
     }),
-    fetcher<OHLCData>(`/coins/${id}/ohlc`, {
+    fetcher<OHLCData[]>(`/coins/${id}/ohlc`, {
       vs_currency: 'usd',
       days: 1,
       // interval: 'hourly',
       precision: 'full',
     }),
   ]);
+
+  const coinOHLCData = Array.isArray(coinOHLCDataRaw) ? coinOHLCDataRaw : [coinOHLCDataRaw];
 
   const platform = coinData.asset_platform_id
     ? coinData.detail_platforms?.[coinData.asset_platform_id]
